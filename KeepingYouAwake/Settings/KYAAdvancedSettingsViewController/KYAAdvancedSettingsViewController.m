@@ -49,6 +49,8 @@
 - (void)configureAdvancedSettings
 {
     Auto settings = [NSMutableArray<KYAUserDefaultsSetting *> new];
+
+    [settings addObject:[[KYAUserDefaultsSetting alloc] initWithTitle:@"Keep awake when lid is closed" key:KYAUserDefaultsKeyKeepAwakeWhenLidClosed]];
     
     [settings addObject:[[KYAUserDefaultsSetting alloc] initWithTitle:KYA_L10N_QUIT_ON_TIMER_EXPIRATION key:KYAUserDefaultsKeyIsQuitOnTimerExpirationEnabled]];
     [settings addObject:[[KYAUserDefaultsSetting alloc] initWithTitle:KYA_L10N_ALLOW_DISPLAY_SLEEP key:KYAUserDefaultsKeyAllowDisplaySleep]];

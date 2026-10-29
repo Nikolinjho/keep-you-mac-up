@@ -30,6 +30,8 @@
 
 // Menu
 @property (nonatomic) NSMenu *menu;
+@property (nonatomic) KYAClosedLidSession *closedLidSession;
+@property (nonatomic) BOOL closedLidErrorPending;
 @end
 
 @implementation KYAAppController
@@ -41,6 +43,7 @@
     self = [super init];
     if(self)
     {
+        [self configureClosedLidSession];
         [self configureStatusItemController];
         [self configureSleepWakeTimer];
         [self configureEventHandler];
@@ -68,12 +71,69 @@
 
 - (void)dealloc
 {
+    [self.closedLidSession updateForActive:NO enabled:NO error:nil];
     Auto center = NSNotificationCenter.defaultCenter;
+    [center removeObserver:self name:NSUserDefaultsDidChangeNotification object:nil];
+    [center removeObserver:self name:NSApplicationWillTerminateNotification object:nil];
     [center removeObserver:self name:NSApplicationDidFinishLaunchingNotification object:nil];
     [center removeObserver:self name:NSApplicationDidChangeScreenParametersNotification object:nil];
     [center removeObserver:self name:kKYABatteryCapacityThresholdDidChangeNotification object:nil];
     
     [self unregisterFromWorkspaceSessionNotifications];
+}
+
+#pragma mark - Closed Lid
+
+- (void)configureClosedLidSession
+{
+    NSURL *url = [NSBundle.mainBundle.bundleURL URLByAppendingPathComponent:
+        @"Contents/Helpers/KeepYouAwakeLidGuard"];
+    self.closedLidSession = [[KYAClosedLidSession alloc] initWithExecutableURL:url];
+    __weak typeof(self) weakSelf = self;
+    self.closedLidSession.failureHandler = ^(NSError *error) {
+        [weakSelf handleClosedLidError:error];
+    };
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+    [center addObserver:self selector:@selector(closedLidDefaultsDidChange:)
+                   name:NSUserDefaultsDidChangeNotification object:nil];
+    [center addObserver:self selector:@selector(closedLidApplicationWillTerminate:)
+                   name:NSApplicationWillTerminateNotification object:nil];
+}
+
+- (void)closedLidDefaultsDidChange:(NSNotification *)notification
+{
+    // Изменения defaults могут приходить с фоновой очереди.
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf synchronizeClosedLidSession]; });
+}
+
+- (void)synchronizeClosedLidSession
+{
+    NSError *error = nil;
+    BOOL enabled = NSUserDefaults.standardUserDefaults.kya_keepAwakeWhenLidClosed;
+    if (![self.closedLidSession updateForActive:self.sleepWakeTimer.isScheduled enabled:enabled error:&error]) {
+        [self handleClosedLidError:error];
+    }
+}
+
+- (void)handleClosedLidError:(NSError *)error
+{
+    NSUserDefaults.standardUserDefaults.kya_keepAwakeWhenLidClosed = NO;
+    if (self.closedLidErrorPending) return;
+    self.closedLidErrorPending = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSAlert *alert = [NSAlert alertWithError:error];
+        [alert runModal];
+        self.closedLidErrorPending = NO;
+    });
+}
+
+- (void)closedLidApplicationWillTerminate:(NSNotification *)notification
+{
+    NSError *error = nil;
+    if (![self.closedLidSession updateForActive:NO enabled:NO error:&error]) {
+        [[NSAlert alertWithError:error] runModal];
+    }
 }
 
 #pragma mark - Main Menu
@@ -139,6 +199,7 @@
         }
     };
     [self.sleepWakeTimer scheduleWithTimeInterval:timeInterval completion:timerCompletion];
+    [self synchronizeClosedLidSession];
 
     // Post activation notification
     Auto fireDate = self.sleepWakeTimer.fireDate;
@@ -154,6 +215,7 @@
     {
         [self.sleepWakeTimer invalidate];
     }
+    [self synchronizeClosedLidSession];
 }
 
 #pragma mark - Default Time Interval
@@ -480,6 +542,9 @@
 
 - (void)sleepWakeTimerDidDeactivate:(KYASleepWakeTimer *)sleepWakeTimer
 {
+    // Уведомление старого таймера может прийти после запуска новой сессии.
+    if (sleepWakeTimer.isScheduled) return;
+    [self synchronizeClosedLidSession];
     // Update the status item
     self.statusItemController.appearance = KYAStatusItemAppearanceInactive;
     

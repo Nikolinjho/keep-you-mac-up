@@ -662,139 +662,139 @@
         }
       }
     },
-    "KeepingYouAwake – Settings" : {
+    "Keep You Mac Up – Settings" : {
       "extractionState" : "manual",
       "localizations" : {
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Indstillinger"
+            "value" : "Keep You Mac Up – Indstillinger"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Einstellungen"
+            "value" : "Keep You Mac Up – Einstellungen"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Ρυθμίσεις"
+            "value" : "Keep You Mac Up – Ρυθμίσεις"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Settings"
+            "value" : "Keep You Mac Up – Settings"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Preferencias"
+            "value" : "Keep You Mac Up – Preferencias"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Asetukset"
+            "value" : "Keep You Mac Up – Asetukset"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Préférences"
+            "value" : "Keep You Mac Up – Préférences"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – सेटिंग्स"
+            "value" : "Keep You Mac Up – सेटिंग्स"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Pengaturan"
+            "value" : "Keep You Mac Up – Pengaturan"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Preferenze"
+            "value" : "Keep You Mac Up – Preferenze"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – 設定"
+            "value" : "Keep You Mac Up – 設定"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – 환경설정"
+            "value" : "Keep You Mac Up – 환경설정"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Voorkeuren"
+            "value" : "Keep You Mac Up – Voorkeuren"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Ustawienia"
+            "value" : "Keep You Mac Up – Ustawienia"
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Preferências"
+            "value" : "Keep You Mac Up – Preferências"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Настройки – KeepingYouAwake"
+            "value" : "Настройки – Keep You Mac Up"
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Nastavenia"
+            "value" : "Keep You Mac Up – Nastavenia"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Tercihler"
+            "value" : "Keep You Mac Up – Tercihler"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Налаштування"
+            "value" : "Keep You Mac Up – Налаштування"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – Cài đặt"
+            "value" : "Keep You Mac Up – Cài đặt"
           }
         },
         "zh" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – 偏好设置"
+            "value" : "Keep You Mac Up – 偏好设置"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "KeepingYouAwake – 偏好設定"
+            "value" : "Keep You Mac Up – 偏好設定"
           }
         }
       }

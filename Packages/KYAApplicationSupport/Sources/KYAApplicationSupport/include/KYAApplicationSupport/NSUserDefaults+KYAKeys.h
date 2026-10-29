@@ -22,8 +22,11 @@ KYA_EXPORT NSString * const KYAUserDefaultsKeyBatteryCapacityThresholdEnabled;
 KYA_EXPORT NSString * const KYAUserDefaultsKeyBatteryCapacityThreshold;
 KYA_EXPORT NSString * const KYAUserDefaultsKeyLowPowerModeMonitoringEnabled;
 KYA_EXPORT NSString * const KYAUserDefaultsKeyPreReleaseUpdatesEnabled;
+KYA_EXPORT NSString * const KYAUserDefaultsKeyKeepAwakeWhenLidClosed;
 
 @interface NSUserDefaults (KYAKeys)
+
+@property (nonatomic) BOOL kya_keepAwakeWhenLidClosed;
 
 /// Returns YES if the sleep wake timer should be activated on app launch.
 @property (nonatomic, getter = kya_isActivatedOnLaunch) BOOL kya_activateOnLaunch;

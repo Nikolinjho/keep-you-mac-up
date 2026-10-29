@@ -38,6 +38,10 @@ NSString * const KYAUserDefaultsKey##_short_defaults_key =                      
 
 @implementation NSUserDefaults (KYAKeys)
 
+KYA_GENERATE_BOOL_PROPERTY(keepAwakeWhenLidClosed,
+                           keepAwakeWhenLidClosed,
+                           KeepAwakeWhenLidClosed);
+
 KYA_GENERATE_BOOL_PROPERTY(isActivatedOnLaunch,
                            activateOnLaunch,
                            ActivateOnLaunch);

@@ -1,45 +1,112 @@
-# KeepingYouAwake
+# Keep You Mac Up
 
-KeepingYouAwake is a small menu bar utility for macOS *(Version 10.13 and newer)* that can prevent your Mac from entering sleep mode for a predefined duration or as long as it is activated.
+Личная версия [KeepingYouAwake](https://github.com/newmarcel/KeepingYouAwake) для Никиты. Сохраняет привычные меню, настройки и управление приложением, добавляя настройку `Keep awake when lid is closed`.
 
-https://keepingyouawake.app/
+## Зачем
 
-## Installation
+KeepingYouAwake предотвращает обычный сон через `caffeinate`, но не сон при закрытии крышки MacBook. Нужна локальная версия, в которой серверы, сборки, загрузки и агенты продолжают работать после закрытия крышки, без перехода на приложение с большим количеством дополнительных функций.
 
-**[Download the latest version here.](https://github.com/newmarcel/KeepingYouAwake/releases/latest)**
+## Поведение
 
-or install it via [cask](http://caskroom.github.io/): `brew install --cask keepingyouawake`.
+- Меню, настройки времени, батареи и управление берём из исходного приложения.
+- Новая настройка по умолчанию выключена.
+- Запрет сна при закрытии крышки действует только при включённой настройке и активном Keep You Mac Up.
+- Выключение приложения, окончание таймера или снятие настройки возвращают обычное поведение сна.
+- Ошибки включения и восстановления режима видны пользователю.
+- У локальной версии собственный идентификатор, чтобы не пересекаться с установленным приложением.
+- Иконка в строке меню – выбранный MacBook Gisela Leyva с пустым экраном в выключенном состоянии и заполненным во включённом.
+- Настройки хранятся отдельно от оригинального приложения.
+- Автообновление из оригинального проекта отключено, чтобы оно не заменило личную сборку.
 
-<img src="./Extras/Screenshot@2x.jpg" width="500" />
+## Запуск
 
-## How does it work?
+Приложение устанавливается в `/Applications/Keep You Mac Up.app` и появляется в списке приложений macOS. После сборки выполни:
 
-The app is a small wrapper around Apple's `caffeinate` command line utility. All current versions of macOS ship with this tool by default. You can read the manual page [here](https://web.archive.org/web/20140604153141/https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man8/caffeinate.8.html).
+```bash
+cd ~/keepyouawake
+./scripts/install.sh
+```
 
-### Does it work on a MacBook with a closed lid?
+Для установки и обновления закрой Keep You Mac Up через Quit. Предыдущая установленная версия сохраняется в `build`. Настройки остаются в системе.
 
-No. Because of _(sensible)_ macOS limitations and out of thermal considerations, KeepingYouAwake will only prevent sleep on desktop Macs and portable Macs with an open lid.
+Запуск установленного приложения:
 
-## Is this dangerous?
+```bash
+open "/Applications/Keep You Mac Up.app"
+```
 
-This utility will not harm your Mac because it is based on an official command line tool by Apple. **BUT** I cannot guarantee anything, so use this tool **AT YOUR OWN RISK**.
+Для обычной установки перетаскиванием есть образ `dist/Keep You Mac Up.dmg`. Открой его и перетащи Keep You Mac Up в Applications. Пересоздать образ после сборки можно командой `./scripts/package.sh`.
 
-## Inspired by Caffeine
+Открой меню приложения правой кнопкой мыши, затем Settings и Advanced. Включи `Keep awake when lid is closed`. Настройка применяется сразу. Нажми на значок MacBook левой кнопкой, чтобы активировать сессию, или выбери время через Activate for Duration.
 
-*KeepingYouAwake* is inspired by *[Caffeine](https://web.archive.org/web/20240625031548/https://www.lightheadsw.com/caffeine/)* from *Lighthead Software*. I used it for many years, but sadly it hasn't been updated in a while. Eventually in 2014 I decided to build a replacement for myself that was optimized for macOS Yosemite and used the [`caffeinate`](https://web.archive.org/web/20140604153141/https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man8/caffeinate.8.html) command line tool under the hood.
+Для проверки используй одну запущенную версию приложения. Для автозапуска включи соответствующую настройку установленной версии.
 
-## Still using old macOS versions?
+## Сборка
 
-- [Version 1.6.8](https://github.com/newmarcel/KeepingYouAwake/releases/tag/1.6.8) is the last release that supports macOS Big Sur and older (11.0, 10.15, 10.14, 10.13)
-- [Version 1.6.2](https://github.com/newmarcel/KeepingYouAwake/releases/tag/1.6.2) is the last release that supports macOS Sierra (10.12)
-- [Version 1.5.2](https://github.com/newmarcel/KeepingYouAwake/releases/tag/1.5.2) is the last release that supports macOS Yosemite (10.10) and El Capitan (10.11)
+Нужен Xcode с macOS SDK. На машине разработки используются Xcode 27 и macOS 27.0, архитектура arm64. Другие версии системы этой сборкой не проверены.
 
-## Contribution Guidelines
+```bash
+cd ~/keepyouawake
+./scripts/build.sh
+```
 
-If you plan to contribute to the project, I recommend taking a look at the [Contribution Guidelines](./CONTRIBUTING.md). These should cover common questions and will be updated over time.
+Скрипт собирает Release, добавляет процесс `KeepYouAwakeLidGuard` и подписывает приложение локальной подписью ad hoc. Платный сертификат разработчика не требуется. Лог сборки – `build/build.log`. Предыдущая сборка из `dist` переносится в `build`.
 
-## License
+Xcode-проект тоже собирает процесс автоматически. Для готового локального приложения с подписью используй скрипт.
 
-Everything in this project is licensed under the [MIT license](http://opensource.org/licenses/MIT). Provided image assets are also covered by this license.
+## Как работает закрытая крышка
 
-*Although it's not required please do not redistribute forked versions of the app with the same name and icon. Thanks!*
+Обычный сон по-прежнему предотвращает `caffeinate`. Отдельный процесс вызывает селектор `kPMSetClamshellSleepState` на `IOPMrootDomain` через IOKit. Он не требует `sudo` и не меняет постоянный флаг `pmset disablesleep`.
+
+Приложение держит открытым канал к процессу. Окончание сессии, снятие настройки и выход закрывают канал. Процесс возвращает обычный сон и завершается. Если приложение аварийно завершится, операционная система также закроет канал. При аварии самого процесса приложение пытается восстановить сон и показывает ошибку.
+
+Процесс повторяет запрос раз в секунду, потому что системное управление питанием может менять этот флаг. Код и номер селектора сверены с [заголовком SDK Apple](https://github.com/apple-oss-distributions/IOKitUser/blob/main/pwr_mgt.subproj/IOPMLibDefs.h) и [RootDomainUserClient](https://github.com/apple-oss-distributions/xnu/blob/main/iokit/Kernel/RootDomainUserClient.cpp).
+
+Это недокументированный для прикладных программ интерфейс. Флаг общий для системы, поэтому другие приложения, управляющие сном при закрытии крышки, могут с ним конфликтовать. Используй такой режим только в одном приложении одновременно. После обновления macOS физическую проверку стоит повторить.
+
+Если принудительно завершить одновременно приложение и процесс восстановления, запрет сна может остаться до перезапуска системы. Его можно снять вручную:
+
+```bash
+~/keepyouawake/dist/'Keep You Mac Up.app'/Contents/Helpers/KeepYouAwakeLidGuard --restore
+```
+
+## Автоматические проверки
+
+```bash
+python3 -m unittest discover -s tests -v
+xcodebuild test -workspace KeepingYouAwake.xcworkspace -scheme KeepingYouAwake \
+  -configuration Debug -destination 'platform=macOS' -derivedDataPath build \
+  CODE_SIGNING_ALLOWED=NO
+```
+
+Новые тесты проверяют запуск и остановку процесса, ошибки, повторное удержание режима, окончание сессии, снятие настройки и аварийное завершение. В них вызов IOKit подменяется, питание компьютера не меняется. Исходные тесты KeepingYouAwake проверяют длительности, настройки и обработку команд.
+
+Проверка настоящего IOKit и готового приложения выполняется отдельно, с открытой крышкой и закрытым Keep You Mac Up:
+
+```bash
+python3 scripts/smoke-native.py
+```
+
+Она кратковременно включает режим, проверяет таймер и восстановление после аварии приложения. В конце каждого сценария вызывает восстановление сна. Лог приложения – `build/native-smoke-app.log`.
+
+## Физическая проверка Никитой
+
+Физическое закрытие крышки агентом не проверено. Тестируй на столе с нормальной вентиляцией.
+
+1. Запусти приложение, включи новую настройку и активируй сессию.
+2. В отдельном терминале запусти `python3 ~/keepyouawake/scripts/heartbeat.py`.
+3. Закрой крышку на 30–60 секунд и открой. В `build/lid-heartbeat.log` должны оставаться записи примерно каждую секунду без длинного разрыва. Записи имеют время MSK.
+4. Повтори от батареи и от зарядки. Во время активного режима проверь подключение и отключение зарядки.
+5. Выключи сессию и закрой крышку. Мак должен снова засыпать. Повтори со снятой настройкой, но активной сессией.
+6. Установи короткий таймер и закрой крышку. После окончания таймера Мак должен уснуть. Повтори с выходом из приложения при открытой крышке, затем закрой её.
+7. Останови запись в терминале через Ctrl+C.
+
+Продолжение работы видно по записям и прогрессу задач. Одна доступность по сети не доказывает отсутствие сна.
+
+## Основа и лицензия
+
+Иконка MacBook: [Gisela Leyva, Noun Project](https://thenounproject.com/icon/macbook-808358/), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Для строки меню обрезаны прозрачные поля при отрисовке и добавлено состояние с заполненным экраном. Авторство также указано в About приложения.
+
+Исходный проект распространяется по MIT, включая графические материалы. При использовании исходников сохраняются лицензия и уведомление об авторских правах Marcel Dierkes.
+
+Исходный README сохранён в `UPSTREAM_README.md`. План и границы проверки – в `docs/PLAN.md`, результаты – в `docs/VERIFICATION.md`.

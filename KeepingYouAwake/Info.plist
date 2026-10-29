@@ -12,10 +12,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>KeepingYouAwake</string>
+			<string>KeepYouAwake</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>keepingyouawake</string>
+				<string>keepyouawake</string>
 			</array>
 		</dict>
 	</array>

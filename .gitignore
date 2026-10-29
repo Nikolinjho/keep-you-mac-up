@@ -2,3 +2,5 @@
 xcuserdata
 build
 dist
+__pycache__/
+docs/research/

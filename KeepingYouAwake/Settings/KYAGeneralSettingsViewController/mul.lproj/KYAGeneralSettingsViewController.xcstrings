@@ -152,7 +152,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Empêche la mise en veille dès le lancement de KeepingYouAwake."
+            "value" : "Empêche la mise en veille dès le lancement de Keep You Mac Up."
           }
         },
         "hi" : {
@@ -428,7 +428,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lance KeepingYouAwake au démarrage du Mac."
+            "value" : "Lance Keep You Mac Up au démarrage du Mac."
           }
         },
         "hi" : {

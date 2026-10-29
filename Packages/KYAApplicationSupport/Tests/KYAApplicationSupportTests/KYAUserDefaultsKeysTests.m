@@ -35,6 +35,18 @@
 
 @implementation KYAUserDefaultsKeysTests
 
+- (void)testНастройкаЗакрытойКрышкиСохраняетсяИСбрасывается
+{
+    NSString *suite = [@"KeepYouAwake.ClosedLidTest." stringByAppendingString:NSUUID.UUID.UUIDString];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:suite];
+    XCTAssertFalse(defaults.kya_keepAwakeWhenLidClosed);
+    defaults.kya_keepAwakeWhenLidClosed = YES;
+    XCTAssertTrue([defaults boolForKey:KYAUserDefaultsKeyKeepAwakeWhenLidClosed]);
+    [defaults removeObjectForKey:KYAUserDefaultsKeyKeepAwakeWhenLidClosed];
+    XCTAssertFalse(defaults.kya_keepAwakeWhenLidClosed);
+    [defaults removePersistentDomainForName:suite];
+}
+
 - (void)setUp
 {
     [super setUp];
