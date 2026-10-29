@@ -107,6 +107,6 @@ python3 scripts/smoke-native.py
 
 Иконка MacBook: [Gisela Leyva, Noun Project](https://thenounproject.com/icon/macbook-808358/), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). Для строки меню обрезаны прозрачные поля при отрисовке и добавлено состояние с заполненным экраном. Авторство также указано в About приложения.
 
-Исходный проект распространяется по MIT, включая графические материалы. При использовании исходников сохраняются лицензия и уведомление об авторских правах Marcel Dierkes.
+Код Keep You Mac Up распространяется по [лицензии MIT](LICENSE). Сохранено уведомление об авторских правах Marcel Dierkes, автора KeepingYouAwake. Иконка MacBook распространяется отдельно по CC BY 3.0, её авторство указано выше.
 
 Исходный README сохранён в `UPSTREAM_README.md`. План и границы проверки – в `docs/PLAN.md`, результаты – в `docs/VERIFICATION.md`.
