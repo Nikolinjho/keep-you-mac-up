@@ -9,7 +9,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import <KYACommon/KYACommon.h>
 
-@interface KYAUserNotificationCenter ()
+@interface KYAUserNotificationCenter () <UNUserNotificationCenterDelegate>
 @property (nonatomic) UNUserNotificationCenter *center;
 @property (nonatomic) os_log_t log;
 @end
@@ -42,6 +42,7 @@
     if(self)
     {
         self.center = center;
+        self.center.delegate = self;
         self.log = KYALogCreateWithCategory("UserNotifications");
     }
     return self;
@@ -62,7 +63,7 @@
                 break;
             case UNAuthorizationStatusProvisional:
                 // fallthrough
-            case KYAUserNotificationAuthorizationStatusGranted:
+            case UNAuthorizationStatusAuthorized:
                 authStatus = KYAUserNotificationAuthorizationStatusGranted;
                 break;
             default:
@@ -78,7 +79,7 @@
 
 - (void)requestAuthorizationWithCompletion:(KYAUserNotificationsAuthorizationCompletion)completion
 {
-    UNAuthorizationOptions options = UNAuthorizationOptionAlert | UNAuthorizationOptionProvisional;
+    UNAuthorizationOptions options = UNAuthorizationOptionAlert;
     [self.center requestAuthorizationWithOptions:options completionHandler:^(BOOL granted, NSError *error) {
         KYAUserNotificationAuthorizationStatus status;
         if(error != nil)
@@ -92,7 +93,7 @@
         }
         else
         {
-            status = KYAUserNotificationAuthorizationStatusUndetermined;
+            status = KYAUserNotificationAuthorizationStatusDenied;
         }
         
         if(completion != nil)
@@ -107,7 +108,8 @@
 - (void)requestAuthorizationIfUndetermined
 {
     [self.center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
-        if(settings.authorizationStatus == UNAuthorizationStatusNotDetermined)
+        if(settings.authorizationStatus == UNAuthorizationStatusNotDetermined ||
+           settings.authorizationStatus == UNAuthorizationStatusProvisional)
         {
             [self requestAuthorizationWithCompletion:nil];
         }
@@ -115,6 +117,13 @@
 }
 
 #pragma mark - Notification Handling
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+      willPresentNotification:(UNNotification *)notification
+        withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    completionHandler(UNNotificationPresentationOptionBanner | UNNotificationPresentationOptionList);
+}
 
 - (void)clearAllDeliveredNotifications
 {

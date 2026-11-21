@@ -19,6 +19,15 @@ NSString * const KYAActivationUserNotificationIdentifier = @"KYAActivationIdenti
 
 @implementation KYAActivationUserNotification
 
++ (KYAUserNotification *)closedLidReminderNotification
+{
+    KYAUserNotification *notification = [KYAUserNotification new];
+    notification.identifier = KYAActivationUserNotificationIdentifier;
+    [notification setLocalizedTitleWithKey:KYA_L10N_CLOSED_LID_REMINDER_TITLE arguments:nil];
+    [notification setLocalizedBodyTextWithKey:KYA_L10N_CLOSED_LID_REMINDER_BODY arguments:nil];
+    return notification;
+}
+
 - (instancetype)initWithFireDate:(NSDate *)fireDate activating:(BOOL)activating
 {
     self = [super init];

@@ -18,6 +18,7 @@ KYA_EXPORT NSString * const KYAActivationUserNotificationIdentifier;
 /// events of a sleep/wake timer.
 API_AVAILABLE(macos(11.0))
 @interface KYAActivationUserNotification : KYAUserNotification
++ (KYAUserNotification *)closedLidReminderNotification;
 /// The fire date of the sleep/wake timer.
 @property (nonatomic, nullable, readonly) NSDate *fireDate;
 

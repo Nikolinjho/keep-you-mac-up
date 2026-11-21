@@ -12,3 +12,4 @@
 #import <KYAApplicationSupport/NSUserDefaults+KYAKeys.h>
 #import <KYAApplicationSupport/KYADisplayParameters.h>
 #import <KYAApplicationSupport/KYAClosedLidSession.h>
+#import <KYAApplicationSupport/KYAClosedLidReminder.h>

@@ -31,6 +31,7 @@
 // Menu
 @property (nonatomic) NSMenu *menu;
 @property (nonatomic) KYAClosedLidSession *closedLidSession;
+@property (nonatomic) KYAClosedLidReminder *closedLidReminder;
 @property (nonatomic) BOOL closedLidErrorPending;
 @end
 
@@ -71,6 +72,7 @@
 
 - (void)dealloc
 {
+    [self.closedLidReminder updateForActive:NO indefinite:NO closedLidRunning:NO];
     [self.closedLidSession updateForActive:NO enabled:NO error:nil];
     Auto center = NSNotificationCenter.defaultCenter;
     [center removeObserver:self name:NSUserDefaultsDidChangeNotification object:nil];
@@ -90,6 +92,9 @@
         @"Contents/Helpers/KeepYouAwakeLidGuard"];
     self.closedLidSession = [[KYAClosedLidSession alloc] initWithExecutableURL:url];
     __weak typeof(self) weakSelf = self;
+    self.closedLidReminder = [[KYAClosedLidReminder alloc] initWithInterval:60 * 60 notificationHandler:^{
+        [weakSelf postClosedLidReminder];
+    }];
     self.closedLidSession.failureHandler = ^(NSError *error) {
         [weakSelf handleClosedLidError:error];
     };
@@ -114,10 +119,27 @@
     if (![self.closedLidSession updateForActive:self.sleepWakeTimer.isScheduled enabled:enabled error:&error]) {
         [self handleClosedLidError:error];
     }
+    [self.closedLidReminder updateForActive:self.sleepWakeTimer.isScheduled
+        indefinite:self.sleepWakeTimer.scheduledTimeInterval == KYASleepWakeTimeIntervalIndefinite
+        closedLidRunning:self.closedLidSession.isRunning && NSUserDefaults.standardUserDefaults.kya_keepAwakeWhenLidClosed];
+}
+
+- (void)postClosedLidReminder
+{
+    // Перепроверяем состояние перед каждым напоминанием, в том числе после пробуждения.
+    [self synchronizeClosedLidSession];
+    if (!self.sleepWakeTimer.isScheduled ||
+        self.sleepWakeTimer.scheduledTimeInterval != KYASleepWakeTimeIntervalIndefinite ||
+        !self.closedLidSession.isRunning ||
+        !NSUserDefaults.standardUserDefaults.kya_keepAwakeWhenLidClosed) return;
+
+    [KYAUserNotificationCenter.sharedCenter postNotification:
+        KYAActivationUserNotification.closedLidReminderNotification];
 }
 
 - (void)handleClosedLidError:(NSError *)error
 {
+    [self.closedLidReminder updateForActive:NO indefinite:NO closedLidRunning:NO];
     NSUserDefaults.standardUserDefaults.kya_keepAwakeWhenLidClosed = NO;
     if (self.closedLidErrorPending) return;
     self.closedLidErrorPending = YES;
@@ -130,6 +152,7 @@
 
 - (void)closedLidApplicationWillTerminate:(NSNotification *)notification
 {
+    [self.closedLidReminder updateForActive:NO indefinite:NO closedLidRunning:NO];
     NSError *error = nil;
     if (![self.closedLidSession updateForActive:NO enabled:NO error:&error]) {
         [[NSAlert alertWithError:error] runModal];
@@ -187,7 +210,10 @@
 
     Auto defaults = NSUserDefaults.standardUserDefaults;
     
+    __weak typeof(self) weakSelf = self;
     Auto timerCompletion = ^(BOOL cancelled) {
+        // Завершение прежней сессии не должно перекрывать уведомление новой.
+        if (weakSelf.sleepWakeTimer.isScheduled) return;
         // Post deactivation notification
         Auto notification = [[KYAActivationUserNotification alloc] initWithFireDate:nil activating:NO];
         [KYAUserNotificationCenter.sharedCenter postNotification:notification];
@@ -202,6 +228,8 @@
     [self synchronizeClosedLidSession];
 
     // Post activation notification
+    if (timeInterval == KYASleepWakeTimeIntervalIndefinite &&
+        self.closedLidSession.isRunning && defaults.kya_keepAwakeWhenLidClosed) return;
     Auto fireDate = self.sleepWakeTimer.fireDate;
     Auto notification = [[KYAActivationUserNotification alloc] initWithFireDate:fireDate activating:YES];
     [KYAUserNotificationCenter.sharedCenter postNotification:notification];

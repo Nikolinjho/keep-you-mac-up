@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Your MacBook will stay awake even with the lid closed. Turn off Keep You Mac Up to allow sleep again." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your MacBook will stay awake even with the lid closed. Turn off Keep You Mac Up to allow sleep again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook не заснёт даже при закрытии крышки. Чтобы вернуть обычный сон, выключите режим в Keep You Mac Up."
+          }
+        }
+      }
+    },
+    "Preventing Sleep Indefinitely" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preventing Sleep Indefinitely"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сон отключён бессрочно"
+          }
+        }
+      }
+    },
     "(Default)" : {
       "comment" : "(Default)",
       "localizations" : {

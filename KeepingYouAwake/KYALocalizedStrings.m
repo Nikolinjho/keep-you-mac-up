@@ -34,6 +34,9 @@
 
 #pragma mark - Notifications
 
+#define KYA_L10N_CLOSED_LID_REMINDER_TITLE NSLocalizedString(@"Preventing Sleep Indefinitely", @"Бессрочный режим с защитой закрытой крышки")
+#define KYA_L10N_CLOSED_LID_REMINDER_BODY NSLocalizedString(@"Your MacBook will stay awake even with the lid closed. Turn off Keep You Mac Up to allow sleep again.", @"Напоминание о режиме закрытой крышки")
+
 #define KYA_L10N_PREVENTING_SLEEP_INDEFINITELY_TITLE NSLocalizedString(@"Preventing Sleep", @"Preventing Sleep")
 
 #define KYA_L10N_PREVENTING_SLEEP_INDEFINITELY_BODY_TEXT NSLocalizedString(@"You can still manually enable sleep mode for your Mac.", @"You can still manually enable sleep mode for your Mac.")
